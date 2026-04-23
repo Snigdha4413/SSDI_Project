@@ -1311,10 +1311,7 @@ elif page == "📉 Regression":
             df_kf[bool_cols_kf] = df_kf[bool_cols_kf].astype(int)
 
             # 4 features used in K-Fold CV (notebook cell 26)
-            CV_FEATURES = ['allowance', 'peer_influence_3',
-                           'spend_reason_The venue/place itself was expensive',
-                           'travel_dist_Less than 2 km']
-            cv_cols = [c for c in CV_FEATURES if c in df_kf.columns]
+            cv_cols = [c for c in sig_features if c in df_kf.columns]
             X_cv = df_kf[cv_cols].fillna(0).astype(float)
             Y_cv = df_kf['spending'].astype(float)
 
