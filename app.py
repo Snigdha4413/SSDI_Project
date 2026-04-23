@@ -1294,8 +1294,8 @@ elif page == "📉 Regression":
             st.error(f"OLS error: {e}")
 
     with tabs[2]:
-        st.markdown("#### K-Fold Cross-Validation (K = 100)")
-        st.markdown("<div style='font-size:0.85rem; color:#5a4d7a; margin-bottom:16px;'>100-fold CV with shuffle (random_state=0) on the <strong style='color:#b400ff;'>final significant features</strong> (p &lt; 0.05 from OLS).</div>", unsafe_allow_html=True)
+        st.markdown("#### K-Fold Cross-Validation (K = 10)")
+        st.markdown("<div style='font-size:0.85rem; color:#5a4d7a; margin-bottom:16px;'>10-fold CV with shuffle (random_state=0) on the <strong style='color:#b400ff;'>final significant features</strong> (p &lt; 0.05 from OLS).</div>", unsafe_allow_html=True)
         try:
             df_kf = df.copy()
             # Cast peer_influence to int so dummies are 'peer_influence_3' not 'peer_influence_3.0'
@@ -1314,7 +1314,7 @@ elif page == "📉 Regression":
             X_cv = df_kf[cv_cols].fillna(0).astype(float)
             Y_cv = df_kf['spending'].astype(float)
 
-            K = 100
+            K = 10
             kfold = KFold(K, random_state=0, shuffle=True)
             model_cv = lm.LinearRegression()
             mse_cv = cross_val_score(model_cv, X_cv, Y_cv, cv=kfold,
