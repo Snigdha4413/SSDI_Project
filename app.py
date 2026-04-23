@@ -1168,10 +1168,10 @@ elif page == "📉 Regression":
 
     with tabs[0]:
         st.markdown("#### Lasso (L1) Regularisation — Automatic Feature Selection")
-        st.markdown("<div style='font-size:0.85rem; color:#5a4d7a; margin-bottom:16px;'>LassoCV over 200 alpha values (log-space 1e-6 to 100), 5-fold internal CV, standardised features.</div>", unsafe_allow_html=True)
+        st.markdown("<div style='font-size:0.85rem; color:#5a4d7a; margin-bottom:16px;'>LassoCV over 400 alpha values (log-space 1e-6 to 100), 5-fold internal CV, standardised features.</div>", unsafe_allow_html=True)
 
         with st.spinner("Fitting LassoCV — crunching alphas..."):
-            alphas = np.logspace(-6, 2, 200)
+            alphas = np.logspace(-6, 2, 400)
             lassocv = LassoCV(alphas=alphas, cv=5, max_iter=10000)
             lassocv.fit(X_scaled, Y)
             best_alpha = lassocv.alpha_
