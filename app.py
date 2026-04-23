@@ -1377,8 +1377,8 @@ elif page == "📉 Regression":
                 <strong style='color:#b400ff;'>{avg_mse:.2f}</strong>
                 (RMSE ≈ <strong style='color:#ff3c78;'>₹{avg_rmse:.2f}</strong>) and mean R² of
                 <strong style='color:#00f5ff;'>{avg_r2:.4f}</strong>.
-                The 4 selected predictors — allowance, peer influence score = 3, venue expense as reason,
-                and short travel distance — explain a modest but consistent portion of spending variance.
+                The final significant predictors (p &lt; 0.05 from OLS) — including occasion type, group size, peer influence, 
+                and venue expense — explain a consistent portion of spending variance across all 100 folds.
                 </p>
             </div>
             """, unsafe_allow_html=True)
