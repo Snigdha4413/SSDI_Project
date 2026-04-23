@@ -1152,9 +1152,12 @@ elif page == "📉 Regression":
             'occasion','exceed_budget','spend_reason','rough_budget','discount',
             'travel_dist','outing_freq','year'
         ])
-        Y = df_r['spending']
-        feature_cols = [c for c in df_r.columns if c != 'spending' and df_r[c].dtype in [np.float64, np.int64, bool]]
-        X_raw = df_r[feature_cols].fillna(0)
+        # Cast boolean dummy columns to int (pandas >= 2.0 returns bool dtype)
+        bool_cols_r = df_r.select_dtypes(include='bool').columns
+        df_r[bool_cols_r] = df_r[bool_cols_r].astype(int)
+        Y = df_r['spending'].astype(float)
+        feature_cols = [c for c in df_r.columns if c != 'spending' and df_r[c].dtype in [np.float64, np.int64, np.int32, np.int8]]
+        X_raw = df_r[feature_cols].fillna(0).astype(float)
         scaler = StandardScaler()
         X_scaled = pd.DataFrame(scaler.fit_transform(X_raw), columns=X_raw.columns)
         return X_raw, X_scaled, Y, feature_cols
@@ -1220,6 +1223,10 @@ elif page == "📉 Regression":
                 'occasion','exceed_budget','spend_reason','rough_budget','discount',
                 'travel_dist','outing_freq','year'
             ])
+            # Cast boolean dummy columns to int (pandas >= 2.0 returns bool dtype)
+            bool_cols = df_ols.select_dtypes(include='bool').columns
+            df_ols[bool_cols] = df_ols[bool_cols].astype(int)
+
             target_cols = ['allowance']
             for c in ['peer_influence_3',
                       'spend_reason_The venue/place itself was expensive',
@@ -1227,8 +1234,8 @@ elif page == "📉 Regression":
                 if c in df_ols.columns:
                     target_cols.append(c)
 
-            X_ols = df_ols[target_cols].fillna(0)
-            Y_ols = df_ols['spending']
+            X_ols = df_ols[target_cols].fillna(0).astype(float)
+            Y_ols = df_ols['spending'].astype(float)
 
             X_const = sm.add_constant(X_ols)
             ols_fit = sm.OLS(Y_ols, X_const).fit()
@@ -1297,8 +1304,11 @@ elif page == "📉 Regression":
                 if c in df_kf.columns:
                     cv_cols.append(c)
 
-            X_cv = df_kf[cv_cols].fillna(0)
-            Y_cv = df_kf['spending']
+            # Cast boolean dummy columns to int (pandas >= 2.0 returns bool dtype)
+            bool_cols_kf = df_kf.select_dtypes(include='bool').columns
+            df_kf[bool_cols_kf] = df_kf[bool_cols_kf].astype(int)
+            X_cv = df_kf[cv_cols].fillna(0).astype(float)
+            Y_cv = df_kf['spending'].astype(float)
 
             K = 100
             kfold = KFold(K, random_state=0, shuffle=True)
