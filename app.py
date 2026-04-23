@@ -1216,8 +1216,7 @@ elif page == "📉 Regression":
 
     with tabs[1]:
         st.markdown("#### OLS Linear Regression — Final Selected Features")
-        st.markdown("<div class='finding-box' style='margin-bottom:16px;'>Features: <strong>allowance</strong>, <strong>group_size_3–4 people</strong>, <strong>peer_influence_3</strong>, <strong>spend_reason_The venue/place itself was expensive</strong>, <strong>travel_dist_Less than 2 km</strong>, <strong>year_3rd Year</strong></div>", unsafe_allow_html=True)
-
+        st.markdown("<div class='finding-box' style='margin-bottom:16px;'>Step 1: Lasso-selected features fed into OLS. Step 2: Features with <strong>p &gt; 0.05 dropped</strong>. Final model uses only statistically significant predictors.</div>", unsafe_allow_html=True)
         try:
             df_ols = df.copy()
             # Cast peer_influence to int so dummies are 'peer_influence_3' not 'peer_influence_3.0'
