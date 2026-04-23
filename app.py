@@ -1232,22 +1232,22 @@ elif page == "📉 Regression":
             df_ols[bool_cols] = df_ols[bool_cols].astype(int)
 
             # 6 features exactly matching smf.ols formula in the notebook
-            OLS_FEATURES = [
-                'allowance',
-                'group_size_3–4 people',
-                'peer_influence_3',
-                'spend_reason_The venue/place itself was expensive',
-                'travel_dist_Less than 2 km',
-                'year_3rd Year',
-            ]
-            target_cols = [c for c in OLS_FEATURES if c in df_ols.columns]
+            # Step 1 — use Lasso-selected features (nonzero comes from tabs[0] Lasso above)
+            lasso_features = [f for f in nonzero.index if f in df_ols.columns]
 
-            X_ols = df_ols[target_cols].fillna(0).astype(float)
+            X_ols = df_ols[lasso_features].fillna(0).astype(float)
             Y_ols = df_ols['spending'].astype(float)
 
             X_const = sm.add_constant(X_ols)
-            ols_fit = sm.OLS(Y_ols, X_const).fit()
+            ols_fit_full = sm.OLS(Y_ols, X_const).fit()
 
+# Step 2 — drop features with p > 0.05, rerun OLS
+            sig_features = ols_fit_full.pvalues[ols_fit_full.pvalues < 0.05].index.tolist()
+            sig_features = [f for f in sig_features if f != 'const']
+
+            X_ols2 = df_ols[sig_features].fillna(0).astype(float)
+            X_const2 = sm.add_constant(X_ols2)
+            ols_fit = sm.OLS(Y_ols, X_const2).fit()   # ols_fit now = final clean model
             col1, col2 = st.columns([1.5, 1])
             with col1:
                 st.markdown("**OLS Summary**")
