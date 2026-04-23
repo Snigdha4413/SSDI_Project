@@ -494,8 +494,14 @@ def plot_layout(fig, title=None, height=None):
 
 # ── Data Loading & Preprocessing ─────────────────────────────────────────────
 @st.cache_data
-def load_data():
-    df = pd.read_excel("augmented_survey.xlsx")
+def load_data(file=None):
+    import os
+    if file is not None:
+        df = pd.read_excel(file)
+    elif os.path.exists("augmented_survey.xlsx"):
+        df = pd.read_excel("augmented_survey.xlsx")
+    else:
+        return None
     df['gender']        = df['Q1. What is your gender?']
     df['allowance']     = df['Q2. What is your approximate monthly allowance / pocket money?']
     df['year']          = df['Q3. Which year of college are you in?']
@@ -528,7 +534,24 @@ def load_data():
     df = df[cols].iloc[:140].dropna(subset=['spending','allowance'])
     return df
 
-df = load_data()
+# ── File Upload Handling ─────────────────────────────────────────────────────
+import os as _os
+_has_local_file = _os.path.exists("augmented_survey.xlsx")
+
+if not _has_local_file:
+    _uploaded = st.sidebar.file_uploader(
+        "📂 Upload augmented_survey.xlsx",
+        type=["xlsx"],
+        help="Upload your survey Excel file to get started."
+    )
+else:
+    _uploaded = None
+
+df = load_data(_uploaded)
+
+if df is None:
+    st.warning("⚠️ Please upload **augmented_survey.xlsx** using the sidebar uploader to get started.")
+    st.stop()
 
 # ── Sidebar ───────────────────────────────────────────────────────────────────
 with st.sidebar:
