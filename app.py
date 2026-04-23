@@ -1033,8 +1033,11 @@ elif page == "🔢 MANOVA":
             else:
                 return 'color: #ff3c78; font-weight: 700;'
 
-        st.dataframe(sum_df.style.applymap(color_result, subset=['Result']),
-                     use_container_width=True)
+        try:
+            styled = sum_df.style.map(color_result, subset=['Result'])
+        except AttributeError:
+            styled = sum_df.style.applymap(color_result, subset=['Result'])
+        st.dataframe(styled, use_container_width=True)
 
         fig = px.bar(sum_df, x='IV', y="Wilks' λ",
                      color="Pr > F",
