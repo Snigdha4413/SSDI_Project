@@ -1295,8 +1295,7 @@ elif page == "📉 Regression":
 
     with tabs[2]:
         st.markdown("#### K-Fold Cross-Validation (K = 100)")
-        st.markdown("<div style='font-size:0.85rem; color:#5a4d7a; margin-bottom:16px;'>100-fold CV with shuffle (random_state=0) on the 4 Lasso-selected features.</div>", unsafe_allow_html=True)
-
+        st.markdown("<div style='font-size:0.85rem; color:#5a4d7a; margin-bottom:16px;'>100-fold CV with shuffle (random_state=0) on the <strong style='color:#b400ff;'>final significant features</strong> (p &lt; 0.05 from OLS).</div>", unsafe_allow_html=True)
         try:
             df_kf = df.copy()
             # Cast peer_influence to int so dummies are 'peer_influence_3' not 'peer_influence_3.0'
