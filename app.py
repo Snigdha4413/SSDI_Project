@@ -1147,6 +1147,8 @@ elif page == "📉 Regression":
     @st.cache_data
     def prep_regression():
         df_r = df.copy()
+        # Cast peer_influence to int so dummies are 'peer_influence_3' not 'peer_influence_3.0'
+        df_r['peer_influence'] = pd.to_numeric(df_r['peer_influence'], errors='coerce').astype('Int64')
         df_r = pd.get_dummies(df_r, columns=[
             'group_size','peer_influence','gender','venue','day','intiated_plan',
             'occasion','exceed_budget','spend_reason','rough_budget','discount',
@@ -1168,10 +1170,10 @@ elif page == "📉 Regression":
 
     with tabs[0]:
         st.markdown("#### Lasso (L1) Regularisation — Automatic Feature Selection")
-        st.markdown("<div style='font-size:0.85rem; color:#5a4d7a; margin-bottom:16px;'>LassoCV over 400 alpha values (log-space 1e-6 to 100), 5-fold internal CV, standardised features.</div>", unsafe_allow_html=True)
+        st.markdown("<div style='font-size:0.85rem; color:#5a4d7a; margin-bottom:16px;'>LassoCV over 400 alpha values (log-space 1e-6 to 1e4), 5-fold internal CV, standardised features.</div>", unsafe_allow_html=True)
 
         with st.spinner("Fitting LassoCV — crunching alphas..."):
-            alphas = np.logspace(-6, 2, 400)
+            alphas = np.logspace(-6, 4, 400)
             lassocv = LassoCV(alphas=alphas, cv=5, max_iter=10000)
             lassocv.fit(X_scaled, Y)
             best_alpha = lassocv.alpha_
@@ -1214,10 +1216,12 @@ elif page == "📉 Regression":
 
     with tabs[1]:
         st.markdown("#### OLS Linear Regression — Final Selected Features")
-        st.markdown("<div class='finding-box' style='margin-bottom:16px;'>Features selected by Lasso: <strong>allowance</strong>, <strong>peer_influence_3</strong>, <strong>spend_reason_The venue/place itself was expensive</strong>, <strong>travel_dist_Less than 2 km</strong></div>", unsafe_allow_html=True)
+        st.markdown("<div class='finding-box' style='margin-bottom:16px;'>Features: <strong>allowance</strong>, <strong>group_size_3–4 people</strong>, <strong>peer_influence_3</strong>, <strong>spend_reason_The venue/place itself was expensive</strong>, <strong>travel_dist_Less than 2 km</strong>, <strong>year_3rd Year</strong></div>", unsafe_allow_html=True)
 
         try:
             df_ols = df.copy()
+            # Cast peer_influence to int so dummies are 'peer_influence_3' not 'peer_influence_3.0'
+            df_ols['peer_influence'] = pd.to_numeric(df_ols['peer_influence'], errors='coerce').astype('Int64')
             df_ols = pd.get_dummies(df_ols, columns=[
                 'group_size','peer_influence','gender','venue','day','intiated_plan',
                 'occasion','exceed_budget','spend_reason','rough_budget','discount',
@@ -1227,12 +1231,16 @@ elif page == "📉 Regression":
             bool_cols = df_ols.select_dtypes(include='bool').columns
             df_ols[bool_cols] = df_ols[bool_cols].astype(int)
 
-            target_cols = ['allowance']
-            for c in ['peer_influence_3',
-                      'spend_reason_The venue/place itself was expensive',
-                      'travel_dist_Less than 2 km']:
-                if c in df_ols.columns:
-                    target_cols.append(c)
+            # 6 features exactly matching smf.ols formula in the notebook
+            OLS_FEATURES = [
+                'allowance',
+                'group_size_3–4 people',
+                'peer_influence_3',
+                'spend_reason_The venue/place itself was expensive',
+                'travel_dist_Less than 2 km',
+                'year_3rd Year',
+            ]
+            target_cols = [c for c in OLS_FEATURES if c in df_ols.columns]
 
             X_ols = df_ols[target_cols].fillna(0).astype(float)
             Y_ols = df_ols['spending'].astype(float)
@@ -1292,21 +1300,22 @@ elif page == "📉 Regression":
 
         try:
             df_kf = df.copy()
+            # Cast peer_influence to int so dummies are 'peer_influence_3' not 'peer_influence_3.0'
+            df_kf['peer_influence'] = pd.to_numeric(df_kf['peer_influence'], errors='coerce').astype('Int64')
             df_kf = pd.get_dummies(df_kf, columns=[
                 'group_size','peer_influence','gender','venue','day','intiated_plan',
                 'occasion','exceed_budget','spend_reason','rough_budget','discount',
                 'travel_dist','outing_freq','year'
             ])
-            cv_cols = ['allowance']
-            for c in ['peer_influence_3',
-                      'spend_reason_The venue/place itself was expensive',
-                      'travel_dist_Less than 2 km']:
-                if c in df_kf.columns:
-                    cv_cols.append(c)
-
             # Cast boolean dummy columns to int (pandas >= 2.0 returns bool dtype)
             bool_cols_kf = df_kf.select_dtypes(include='bool').columns
             df_kf[bool_cols_kf] = df_kf[bool_cols_kf].astype(int)
+
+            # 4 features used in K-Fold CV (notebook cell 26)
+            CV_FEATURES = ['allowance', 'peer_influence_3',
+                           'spend_reason_The venue/place itself was expensive',
+                           'travel_dist_Less than 2 km']
+            cv_cols = [c for c in CV_FEATURES if c in df_kf.columns]
             X_cv = df_kf[cv_cols].fillna(0).astype(float)
             Y_cv = df_kf['spending'].astype(float)
 
