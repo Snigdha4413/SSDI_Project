@@ -540,7 +540,7 @@ _has_local_file = _os.path.exists("augmented_survey.xlsx")
 
 if not _has_local_file:
     _uploaded = st.sidebar.file_uploader(
-        "📂 Upload augmented_survey.xlsx",
+        "Upload augmented_survey.xlsx",
         type=["xlsx"],
         help="Upload your survey Excel file to get started."
     )
@@ -550,26 +550,26 @@ else:
 df = load_data(_uploaded)
 
 if df is None:
-    st.warning("⚠️ Please upload **augmented_survey.xlsx** using the sidebar uploader to get started.")
+    st.warning("Please upload **augmented_survey.xlsx** using the sidebar uploader to get started.")
     st.stop()
 
 # ── Sidebar ───────────────────────────────────────────────────────────────────
 with st.sidebar:
     st.markdown("""
     <div class='sidebar-logo'>
-        <div class='sidebar-logo-main'>💸 Broke<br>College<br>Kids</div>
+        <div class='sidebar-logo-main'>Broke<br>College<br>Kids</div>
         <div class='sidebar-logo-sub'>Student Spending Lab</div>
     </div>
     """, unsafe_allow_html=True)
 
-    st.markdown("<div class='nav-header'>🗺 Navigate</div>", unsafe_allow_html=True)
+    st.markdown("<div class='nav-header'>Navigate</div>", unsafe_allow_html=True)
     page = st.radio(
         "Go to",
-        ["📊 Overview", "🧪 Hypothesis Testing", "📈 ANOVA", "🔢 MANOVA", "📉 Regression"],
+        ["Overview", "Hypothesis Testing", "ANOVA", "MANOVA", "Regression"],
         label_visibility="collapsed"
     )
 
-    st.markdown("<div class='nav-header'>📦 Dataset</div>", unsafe_allow_html=True)
+    st.markdown("<div class='nav-header'>Dataset</div>", unsafe_allow_html=True)
     st.markdown(f"""
     <div class='sidebar-stat'>
         <div class='sidebar-stat-label'>Respondents Analysed</div>
@@ -591,7 +591,7 @@ with st.sidebar:
 
     st.markdown("""
     <div style='margin-top:24px; padding:12px; background:rgba(255,60,120,0.06); border:1px solid rgba(255,60,120,0.2); border-radius:10px;'>
-        <div style='font-size:0.7rem; color:#5a2030; text-transform:uppercase; letter-spacing:0.08em; font-weight:700;'>⚠ Scope Note</div>
+        <div style='font-size:0.7rem; color:#5a2030; text-transform:uppercase; letter-spacing:0.08em; font-weight:700;'>Scope Note</div>
         <div style='font-size:0.75rem; color:#7a4055; margin-top:5px;'>Analysis uses first 140 rows of the augmented survey dataset only.</div>
     </div>
     """, unsafe_allow_html=True)
@@ -600,11 +600,11 @@ with st.sidebar:
 # ══════════════════════════════════════════════════════════════════════════════
 # PAGE 1 — OVERVIEW
 # ══════════════════════════════════════════════════════════════════════════════
-if page == "📊 Overview":
+if page == "Overview":
 
     st.markdown("""
     <div class='hero-banner'>
-        <div class='hero-title'>Where Did Our Money Go?? 💸</div>
+        <div class='hero-title'>Where Did Our Money Go??</div>
         <div class='hero-sub'>A statistical autopsy of 140 college students blowing their allowance on outings.</div>
         <span class='hero-tag'>n = 140</span>
         <span class='hero-tag'>Mumbai</span>
@@ -713,18 +713,18 @@ if page == "📊 Overview":
         plot_layout(fig7)
         st.plotly_chart(fig7, use_container_width=True)
 
-    with st.expander("🗄️ Raw Data Preview (first 30 rows)"):
+    with st.expander("Raw Data Preview (first 30 rows)"):
         st.dataframe(df.head(30), use_container_width=True)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
 # PAGE 2 — HYPOTHESIS TESTING
 # ══════════════════════════════════════════════════════════════════════════════
-elif page == "🧪 Hypothesis Testing":
+elif page == "Hypothesis Testing":
 
     st.markdown("""
     <div class='hero-banner'>
-        <div class='hero-title'>Hypothesis Tests 🧪</div>
+        <div class='hero-title'>Hypothesis Tests</div>
         <div class='hero-sub'>T-tests and Z-tests for proportions — putting our assumptions under the microscope.</div>
         <span class='hero-tag'>Welch's T-test</span>
         <span class='hero-tag'>One-tailed T-test</span>
@@ -735,9 +735,9 @@ elif page == "🧪 Hypothesis Testing":
 
     def result_badge(p, threshold=0.05):
         if p < threshold:
-            return "<span class='badge-sig'>⚡ Significant (p < 0.05)</span>"
+            return "<span class='badge-sig'>Significant (p &lt; 0.05)</span>"
         else:
-            return "<span class='badge-nosig'>✗ Not Significant (p ≥ 0.05)</span>"
+            return "<span class='badge-nosig'>Not Significant (p &ge; 0.05)</span>"
 
     # Q1 — Gender vs Spending
     st.markdown("""
@@ -865,11 +865,11 @@ elif page == "🧪 Hypothesis Testing":
 # ══════════════════════════════════════════════════════════════════════════════
 # PAGE 3 — ANOVA
 # ══════════════════════════════════════════════════════════════════════════════
-elif page == "📈 ANOVA":
+elif page == "ANOVA":
 
     st.markdown("""
     <div class='hero-banner'>
-        <div class='hero-title'>ANOVA 📈</div>
+        <div class='hero-title'>ANOVA</div>
         <div class='hero-sub'>One-way & two-way ANOVA with Tukey HSD post-hoc — who's spending differently and why?</div>
         <span class='hero-tag'>One-Way ANOVA</span>
         <span class='hero-tag'>Two-Way ANOVA</span>
@@ -878,7 +878,7 @@ elif page == "📈 ANOVA":
     </div>
     """, unsafe_allow_html=True)
 
-    tabs = st.tabs(["⚡ One-Way ANOVA", "🌀 Two-Way ANOVA"])
+    tabs = st.tabs(["One-Way ANOVA", "Two-Way ANOVA"])
 
     with tabs[0]:
         anova_choice = st.selectbox("Select a test to run:", [
@@ -901,7 +901,7 @@ elif page == "📈 ANOVA":
 
             col1, col2 = st.columns([1, 2])
             with col1:
-                badge = "<span class='badge-sig'>⚡ Significant</span>" if p_val < 0.05 else "<span class='badge-nosig'>✗ Not Significant</span>"
+                badge = "<span class='badge-sig'>Significant</span>" if p_val < 0.05 else "<span class='badge-nosig'>Not Significant</span>"
                 f_val = table['F'].iloc[0]
                 st.markdown(f"""
                 <div class='neon-card'>
@@ -932,19 +932,19 @@ elif page == "📈 ANOVA":
 
         if anova_choice == "Allowance ~ College Year":
             run_anova("allowance ~ C(year)", "year", "allowance", "Allowance")
-            st.markdown("<div class='finding-box'>💡 <strong>Finding:</strong> 4th year students have significantly higher allowance than 1st year students.</div>", unsafe_allow_html=True)
+            st.markdown("<div class='finding-box'><strong>Finding:</strong> 4th year students have significantly higher allowance than 1st year students.</div>", unsafe_allow_html=True)
         elif anova_choice == "Spending ~ Travel Distance":
             run_anova("spending ~ C(travel_dist)", "travel_dist", "spending", "Spending")
-            st.markdown("<div class='finding-box'>💡 <strong>Finding:</strong> Students travelling >10 km spend the most; the &lt;2 km group spends the least.</div>", unsafe_allow_html=True)
+            st.markdown("<div class='finding-box'><strong>Finding:</strong> Students travelling &gt;10 km spend the most; the &lt;2 km group spends the least.</div>", unsafe_allow_html=True)
         elif anova_choice == "Allowance ~ Discount Usage":
             run_anova("allowance ~ C(discount)", "discount", "allowance", "Allowance")
-            st.markdown("<div class='finding-box'>💡 <strong>Finding:</strong> Students who use discounts tend to have higher allowances — richer students hunt deals more.</div>", unsafe_allow_html=True)
+            st.markdown("<div class='finding-box'><strong>Finding:</strong> Students who use discounts tend to have higher allowances — richer students hunt deals more.</div>", unsafe_allow_html=True)
         elif anova_choice == "Spending ~ Occasion":
             run_anova("spending ~ C(occasion)", "occasion", "spending", "Spending")
-            st.markdown("<div class='finding-box'>💡 <strong>Finding:</strong> Date/romantic outings drive the highest spending. Love is expensive.</div>", unsafe_allow_html=True)
+            st.markdown("<div class='finding-box'><strong>Finding:</strong> Date/romantic outings drive the highest spending. Love is expensive.</div>", unsafe_allow_html=True)
         elif anova_choice == "Spending ~ Group Size":
             run_anova("spending ~ C(group_size)", "group_size", "spending", "Spending")
-            st.markdown("<div class='finding-box'>💡 <strong>Finding:</strong> Groups of 8+ people spend the most — squad tax is real.</div>", unsafe_allow_html=True)
+            st.markdown("<div class='finding-box'><strong>Finding:</strong> Groups of 8+ people spend the most — squad tax is real.</div>", unsafe_allow_html=True)
 
     with tabs[1]:
         two_choice = st.selectbox("Choose interaction model:", [
@@ -972,7 +972,7 @@ elif page == "📈 ANOVA":
                 fig.update_xaxes(tickangle=-30)
                 plot_layout(fig)
                 st.plotly_chart(fig, use_container_width=True)
-            st.markdown("<div class='finding-box'>💡 <strong>Finding:</strong> Occasion and travel distance are the dominant individual drivers of spending. Date outings >10 km produce the highest combined spend.</div>", unsafe_allow_html=True)
+            st.markdown("<div class='finding-box'><strong>Finding:</strong> Occasion and travel distance are the dominant individual drivers of spending. Date outings &gt;10 km produce the highest combined spend.</div>", unsafe_allow_html=True)
 
         else:
             fit = smf.ols('allowance ~ C(year) * C(rough_budget) * C(occasion)', data=df).fit()
@@ -995,17 +995,17 @@ elif page == "📈 ANOVA":
                     fig.update_xaxes(tickangle=-30)
                     plot_layout(fig)
                     st.plotly_chart(fig, use_container_width=True)
-            st.markdown("<div class='finding-box'>💡 <strong>Finding:</strong> Year drives allowance; occasion drives where it gets spent. Senior students self-select into higher-spend occasion types.</div>", unsafe_allow_html=True)
+        st.markdown("<div class='finding-box'><strong>Finding:</strong> Year drives allowance; occasion drives where it gets spent. Senior students self-select into higher-spend occasion types.</div>", unsafe_allow_html=True)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
 # PAGE 4 — MANOVA
 # ══════════════════════════════════════════════════════════════════════════════
-elif page == "🔢 MANOVA":
+elif page == "MANOVA":
 
     st.markdown("""
     <div class='hero-banner'>
-        <div class='hero-title'>MANOVA 🔢</div>
+        <div class='hero-title'>MANOVA</div>
         <div class='hero-sub'>Multivariate ANOVA — testing whether categorical IVs simultaneously affect both spending AND allowance.</div>
         <span class='hero-tag'>Wilks' Lambda</span>
         <span class='hero-tag'>Pillai's Trace</span>
@@ -1035,7 +1035,7 @@ elif page == "🔢 MANOVA":
                 p = float(wilks['Pr > F'].values[0])
                 f = float(wilks['F Value'].values[0])
                 w = float(wilks['Value'].values[0])
-                sig = "Significant ✓" if p < 0.05 else ("Marginal" if p < 0.10 else "Not Significant ✗")
+                sig = "Significant" if p < 0.05 else ("Marginal" if p < 0.10 else "Not Significant")
                 results_list.append({'IV': label, "Wilks' λ": round(w,4), 'F Value': round(f,4),
                                      'Pr > F': round(p,4), 'Result': sig})
         except:
@@ -1046,14 +1046,18 @@ elif page == "🔢 MANOVA":
         st.markdown("#### One-Way MANOVA Summary — DVs: spending + allowance")
 
         def color_result(val):
-            if 'Significant ✓' in str(val):
+            s = str(val)
+            if s == 'Significant':
                 return 'color: #00f582; font-weight: 700;'
-            elif 'Marginal' in str(val):
+            elif s == 'Marginal':
                 return 'color: #ffb800; font-weight: 700;'
             else:
                 return 'color: #ff3c78; font-weight: 700;'
 
-        st.dataframe(sum_df.style.applymap(color_result, subset=['Result']),
+        # pandas 2.x renamed applymap -> map
+        _styler = sum_df.style
+        _apply = getattr(_styler, 'map', getattr(_styler, 'applymap', None))
+        st.dataframe(_apply(color_result, subset=['Result']),
                      use_container_width=True)
 
         fig = px.bar(sum_df, x='IV', y="Wilks' λ",
@@ -1068,7 +1072,7 @@ elif page == "🔢 MANOVA":
         st.plotly_chart(fig, use_container_width=True)
 
     st.markdown("<hr class='neon-divider'>", unsafe_allow_html=True)
-    st.markdown("#### 🔬 Drill Down — Select an IV for detailed results")
+    st.markdown("#### Drill Down — Select an IV for detailed results")
 
     iv_sel = st.selectbox("Independent Variable", [l for _, _, l in tests])
     iv_map = {l: (iv, f) for iv, f, l in tests}
@@ -1122,7 +1126,7 @@ elif page == "🔢 MANOVA":
         st.error(f"Could not run MANOVA: {e}")
 
     st.markdown("<hr class='neon-divider'>", unsafe_allow_html=True)
-    st.markdown("#### 🌐 Two-Way MANOVA — Occasion × Travel Distance → Spending")
+    st.markdown("#### Two-Way MANOVA — Occasion x Travel Distance → Spending")
     try:
         fit = smf.ols('spending ~ C(occasion) * C(travel_dist)', data=df_m).fit()
         anova_2w = sm.stats.anova_lm(fit, typ=1).reset_index()
@@ -1140,7 +1144,7 @@ elif page == "🔢 MANOVA":
             fig.update_yaxes(title=None)
             plot_layout(fig)
             st.plotly_chart(fig, use_container_width=True)
-        st.markdown("<div class='finding-box'>💡 <strong>Finding:</strong> Both occasion and travel distance independently drive spending. Date outings >10 km produce the highest combined spend.</div>", unsafe_allow_html=True)
+        st.markdown("<div class='finding-box'><strong>Finding:</strong> Both occasion and travel distance independently drive spending. Date outings &gt;10 km produce the highest combined spend.</div>", unsafe_allow_html=True)
     except Exception as e:
         st.error(str(e))
 
@@ -1148,11 +1152,11 @@ elif page == "🔢 MANOVA":
 # ══════════════════════════════════════════════════════════════════════════════
 # PAGE 5 — REGRESSION
 # ══════════════════════════════════════════════════════════════════════════════
-elif page == "📉 Regression":
+elif page == "Regression":
 
     st.markdown("""
     <div class='hero-banner'>
-        <div class='hero-title'>Regression Analysis 📉</div>
+        <div class='hero-title'>Regression Analysis</div>
         <div class='hero-sub'>Lasso regularisation, OLS linear regression, and K=100 cross-validation — building the spending prediction model.</div>
         <span class='hero-tag'>Lasso (L1)</span>
         <span class='hero-tag'>OLS</span>
@@ -1178,7 +1182,7 @@ elif page == "📉 Regression":
 
     X_raw, X_scaled, Y, feature_cols = prep_regression()
 
-    tabs = st.tabs(["🔬 Lasso Regularisation", "📐 OLS Linear Regression", "🔁 K-Fold CV"])
+    tabs = st.tabs(["Lasso Regularisation", "OLS Linear Regression", "K-Fold CV"])
 
     with tabs[0]:
         st.markdown("#### Lasso (L1) Regularisation — Automatic Feature Selection")
@@ -1206,7 +1210,7 @@ elif page == "📉 Regression":
                 <div class='stat-row'><span class='stat-key'>Zeroed out</span><span class='stat-val'>{(coef_series==0).sum()}</span></div>
             </div>
             """, unsafe_allow_html=True)
-            st.markdown("**🎯 Selected Features:**")
+            st.markdown("**Selected Features:**")
             st.dataframe(nonzero.round(4).reset_index().rename(columns={'index':'Feature', 0:'Coefficient'}),
                          use_container_width=True)
         with col2:
@@ -1244,8 +1248,8 @@ elif page == "📉 Regression":
                 if c in df_ols.columns:
                     target_cols.append(c)
 
-            X_ols = df_ols[target_cols].fillna(0)
-            Y_ols = df_ols['spending']
+            X_ols = df_ols[target_cols].fillna(0).astype(float)
+            Y_ols = df_ols['spending'].astype(float)
 
             X_const = sm.add_constant(X_ols)
             ols_fit = sm.OLS(Y_ols, X_const).fit()
@@ -1314,8 +1318,8 @@ elif page == "📉 Regression":
                 if c in df_kf.columns:
                     cv_cols.append(c)
 
-            X_cv = df_kf[cv_cols].fillna(0)
-            Y_cv = df_kf['spending']
+            X_cv = df_kf[cv_cols].fillna(0).astype(float)
+            Y_cv = df_kf['spending'].astype(float)
 
             K = 100
             kfold = KFold(K, random_state=0, shuffle=True)
